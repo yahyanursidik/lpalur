@@ -1,0 +1,23 @@
+---
+// Coretan tangan beranimasi (stroke digambar saat masuk viewport).
+interface Props {
+  variant?: 'underline' | 'circle' | 'brush' | 'squiggle';
+  color?: 'green' | 'blue';
+}
+const { variant = 'underline', color = 'green' } = Astro.props;
+
+const shapes = {
+  underline: { vb: '0 0 300 24', d: 'M4 16 C 60 6, 120 4, 180 9 S 270 16, 296 8' },
+  squiggle: { vb: '0 0 300 24', d: 'M3 14 Q 22 4 40 14 T 78 14 T 116 14 T 154 14 T 192 14 T 230 14 T 268 14 T 298 12' },
+  circle: { vb: '0 0 300 110', d: 'M150 8 C 60 6, 8 30, 10 58 C 12 90, 90 104, 168 101 C 248 98, 294 78, 290 50 C 286 22, 220 6, 132 12 C 100 14, 72 20, 52 28' },
+  brush: { vb: '0 0 300 60', d: 'M6 40 C 70 30, 150 24, 294 30' },
+};
+const s = shapes[variant];
+---
+
+<span class={`scribble scribble--${variant} scribble--${color}`}>
+  <slot />
+  <svg viewBox={s.vb} preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d={s.d} pathLength="1" />
+  </svg>
+</span>

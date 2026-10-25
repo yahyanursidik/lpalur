@@ -1,0 +1,362 @@
+---
+import Icon from './Icon.astro';
+import Scribble from './Scribble.astro';
+import { problems } from '../data/site';
+---
+
+<section class="section problems" id="solusi" aria-labelledby="solusi-title">
+  <div class="container">
+    <div class="section-head section-head--center" data-reveal>
+      <span class="eyebrow">Masalah bisnis</span>
+      <h2 id="solusi-title">Sudah sibuk kerja. Jangan sibuk <Scribble variant="squiggle">cari data.</Scribble></h2>
+    </div>
+
+    <div class="problems__grid">
+      {problems.map((p, i) => (
+        <article class="pcard" data-reveal style={`--d:${i * 110}`}>
+          <div class={`pcard__viz pcard__viz--${i + 1}`} aria-hidden="true">
+            {i === 0 && (
+              <div class="viz-loc">
+                <div class="viz-loc__map">
+                  <span class="pinm" style="--x:22%;--y:36%;--k:0"><Icon name="pin" size={18} /></span>
+                  <span class="pinm" style="--x:62%;--y:24%;--k:1"><Icon name="pin" size={18} /></span>
+                  <span class="pinm" style="--x:46%;--y:66%;--k:2"><Icon name="pin" size={18} /></span>
+                  <svg viewBox="0 0 200 110" preserveAspectRatio="none"><path d="M44 44 C 80 20, 110 20, 124 30 M124 30 C 120 60, 104 70, 92 74" /></svg>
+                </div>
+                <ul class="viz-loc__list">
+                  <li><span>Gudang</span><i style="--w:78%"></i></li>
+                  <li><span>Workshop</span><i style="--w:46%"></i></li>
+                  <li><span>Toko</span><i style="--w:30%"></i></li>
+                </ul>
+              </div>
+            )}
+            {i === 1 && (
+              <div class="viz-steps">
+                <div class="viz-steps__line"><span></span></div>
+                {['Material', 'Proses', 'QC', 'Selesai'].map((s, k) => (
+                  <div class="viz-steps__s" style={`--k:${k}`}>
+                    <i><Icon name="check" size={12} stroke={3} /></i>
+                    <span>{s}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            {i === 2 && (
+              <div class="viz-profit">
+                <div class="viz-profit__rows">
+                  <p><span>Penjualan</span><i class="b" style="--w:92%"></i></p>
+                  <p><span>Biaya bahan</span><i class="r" style="--w:48%"></i></p>
+                  <p><span>Biaya operasional</span><i class="r" style="--w:22%"></i></p>
+                  <p class="tot"><span>Margin</span><i class="g" style="--w:22%"></i></p>
+                </div>
+              </div>
+            )}
+          </div>
+          <div class="pcard__body">
+            <span class="pcard__ico"><Icon name={p.icon} size={20} /></span>
+            <h3>“{p.q}”</h3>
+            <p>{p.a}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .problems__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .pcard {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.3s;
+  }
+
+  .pcard:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-2);
+  }
+
+  .pcard__viz {
+    position: relative;
+    height: 200px;
+    padding: 24px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(160deg, var(--blue-50), #f6f9fe);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .pcard__viz--2 {
+    background: linear-gradient(160deg, var(--green-50), #f4fbf8);
+  }
+
+  .pcard__viz--3 {
+    background: linear-gradient(160deg, #f4f1ff, #faf9ff);
+  }
+
+  .pcard__body {
+    padding: 26px 26px 30px;
+  }
+
+  .pcard__ico {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--ink);
+    color: #fff;
+    margin-bottom: 18px;
+    transition: transform 0.4s var(--ease-spring);
+  }
+
+  .pcard:hover .pcard__ico {
+    transform: rotate(-8deg) scale(1.06);
+  }
+
+  .pcard h3 {
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+  }
+
+  .pcard p {
+    margin-top: 10px;
+    color: var(--muted);
+  }
+
+  /* Viz 1 — lokasi */
+  .viz-loc {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .viz-loc__map {
+    position: relative;
+    height: 130px;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid var(--blue-100);
+    background-image: radial-gradient(var(--blue-100) 1px, transparent 1px);
+    background-size: 12px 12px;
+  }
+
+  .viz-loc__map svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .viz-loc__map path {
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 2;
+    stroke-dasharray: 4 5;
+    opacity: 0.5;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .pinm {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    color: var(--blue);
+    transform: translate(-50%, -100%) scale(0);
+    transition: transform 0.6s var(--ease-spring);
+    transition-delay: calc(var(--k) * 160ms + 300ms);
+    z-index: 1;
+  }
+
+  .pinm:nth-child(2) { color: var(--green); }
+
+  .is-in .pinm {
+    transform: translate(-50%, -100%) scale(1);
+  }
+
+  .pcard:hover .pinm {
+    animation: bob 1s var(--ease) infinite alternate;
+    animation-delay: calc(var(--k) * 120ms);
+  }
+
+  @keyframes bob {
+    to { transform: translate(-50%, -125%) scale(1); }
+  }
+
+  .viz-loc__list {
+    display: grid;
+    gap: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  .viz-loc__list i {
+    display: block;
+    height: 7px;
+    margin-top: 4px;
+    border-radius: 6px;
+    background: var(--blue-100);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .viz-loc__list i::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: var(--w);
+    border-radius: inherit;
+    background: var(--blue);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    transition: transform 1s var(--ease) 0.6s;
+  }
+
+  .is-in .viz-loc__list i::after {
+    transform: none;
+  }
+
+  /* Viz 2 — progres */
+  .viz-steps {
+    position: relative;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .viz-steps__line {
+    position: absolute;
+    top: 15px;
+    left: 12.5%;
+    right: 12.5%;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--green-100);
+  }
+
+  .viz-steps__line span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: inherit;
+    background: var(--green);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+  }
+
+  .is-in .viz-steps__line span {
+    animation: steps-fill 4.5s var(--ease) 0.4s infinite;
+  }
+
+  @keyframes steps-fill {
+    0% { transform: scaleX(0); }
+    70%, 100% { transform: scaleX(1); }
+  }
+
+  .viz-steps__s {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  .viz-steps__s i {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    border: 2px solid var(--green-100);
+    color: transparent;
+  }
+
+  .is-in .viz-steps__s i {
+    animation: step-on 4.5s var(--ease) infinite;
+    animation-delay: calc(var(--k) * 1.05s + 0.4s);
+  }
+
+  @keyframes step-on {
+    0% { background: #fff; border-color: var(--green-100); color: transparent; }
+    6%, 60% { background: var(--green); border-color: var(--green); color: #fff; transform: scale(1.08); }
+    70%, 100% { background: var(--green); border-color: var(--green); color: #fff; transform: scale(1); }
+  }
+
+  /* Viz 3 — margin */
+  .viz-profit {
+    width: 100%;
+    padding: 16px 18px;
+    background: #fff;
+    border: 1px solid #e7e2fb;
+    border-radius: 14px;
+  }
+
+  .viz-profit__rows {
+    display: grid;
+    gap: 9px;
+  }
+
+  .viz-profit p {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  .viz-profit p.tot {
+    border-top: 1px dashed #d9d2f6;
+    padding-top: 9px;
+    color: var(--ink);
+  }
+
+  .viz-profit i {
+    display: block;
+    height: 9px;
+    width: var(--w);
+    border-radius: 6px;
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    transition: transform 0.9s var(--ease);
+  }
+
+  .viz-profit p:nth-child(2) i { transition-delay: 0.25s; }
+  .viz-profit p:nth-child(3) i { transition-delay: 0.45s; }
+  .viz-profit p:nth-child(4) i { transition-delay: 0.75s; }
+
+  .viz-profit i.b { background: #7a5af8; }
+  .viz-profit i.r { background: #d9d2f6; }
+  .viz-profit i.g { background: var(--green); }
+
+  .is-in .viz-profit i {
+    transform: none;
+  }
+
+  @media (max-width: 960px) {
+    .problems__grid {
+      grid-template-columns: 1fr;
+      max-width: 560px;
+      margin-inline: auto;
+    }
+  }
+</style>

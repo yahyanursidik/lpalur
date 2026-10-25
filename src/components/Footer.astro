@@ -1,0 +1,144 @@
+---
+import { site } from '../data/site';
+
+const year = new Date().getFullYear();
+const cols = [
+  { h: 'Produk', links: [['Modul', '/#fitur'], ['Alur terhubung', '/#alur'], ['Industri', '/#industri']] },
+  { h: 'Implementasi', links: [['Self-hosted', '/#implementasi'], ['Private cloud', '/#implementasi'], ['Migrasi data', '/#implementasi']] },
+  { h: 'Perusahaan', links: [['Kontak', '/#kontak'], ['FAQ', '/#faq'], ['Kebijakan privasi', '/kebijakan-privasi']] },
+];
+---
+
+<footer class="foot">
+  <div class="container">
+    <div class="foot__top">
+      <div class="foot__brand">
+        <a href="/" aria-label="NataAlur — beranda">
+          <img src="/assets/logo-horizontal.webp" alt="NataAlur ERP" width="720" height="178" loading="lazy" decoding="async" />
+        </a>
+        <p>{site.tagline}</p>
+        <a class="foot__mail" href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+      {cols.map((c) => (
+        <nav class="foot__col" aria-label={c.h}>
+          <p>{c.h}</p>
+          <ul>
+            {c.links.map(([label, href]) => <li><a href={href}>{label}</a></li>)}
+          </ul>
+        </nav>
+      ))}
+    </div>
+    <div class="foot__bottom">
+      <p>© <span data-year>{year}</span> NataAlur · Menata Alur, Menguatkan Usaha.</p>
+      <p class="foot__links">
+        <a href="/#fitur">Fitur</a><span aria-hidden="true">·</span><a href="/#implementasi">Implementasi</a><span aria-hidden="true">·</span><a href="/#kontak">Kontak</a>
+      </p>
+    </div>
+  </div>
+  <div class="foot__word" aria-hidden="true">NataAlur</div>
+</footer>
+
+<style is:global>
+  .foot {
+    position: relative;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .foot__top {
+    display: grid;
+    grid-template-columns: 1.6fr repeat(3, 1fr);
+    gap: 32px;
+    padding: 64px 0 40px;
+  }
+
+  .foot__brand img {
+    height: 40px;
+    width: auto;
+  }
+
+  .foot__brand p {
+    margin-top: 16px;
+    color: var(--muted);
+    max-width: 280px;
+  }
+
+  .foot__mail {
+    display: inline-block;
+    margin-top: 12px;
+    font-weight: 600;
+    color: var(--blue);
+  }
+
+  .foot__col p {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 14px;
+  }
+
+  .foot__col li + li {
+    margin-top: 10px;
+  }
+
+  .foot__col a,
+  .foot__links a {
+    color: var(--muted);
+    font-size: 0.95rem;
+    transition: color 0.2s;
+  }
+
+  .foot__col a:hover,
+  .foot__links a:hover {
+    color: var(--blue);
+  }
+
+  .foot__bottom {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 22px 0 28px;
+    border-top: 1px solid var(--border);
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+
+  .foot__links {
+    display: flex;
+    gap: 10px;
+  }
+
+  .foot__word {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: clamp(5rem, 19vw, 17rem);
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+    text-align: center;
+    background: linear-gradient(90deg, var(--blue), var(--green));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0.09;
+    margin-bottom: -0.12em;
+    user-select: none;
+  }
+
+  @media (max-width: 860px) {
+    .foot__top {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .foot__brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .foot__top {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

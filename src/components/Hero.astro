@@ -1,0 +1,333 @@
+---
+import Icon from './Icon.astro';
+import Scribble from './Scribble.astro';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__dots dots"></div>
+    <div class="hero__blob hero__blob--b"></div>
+    <div class="hero__blob hero__blob--g"></div>
+    <svg class="hero__flow" viewBox="0 0 1440 520" preserveAspectRatio="none">
+      <path class="f1" d="M-60 380 C 220 260, 420 520, 720 380 S 1180 220, 1500 320" />
+      <path class="f2" d="M-60 430 C 220 310, 420 570, 720 430 S 1180 270, 1500 370" />
+    </svg>
+  </div>
+
+  <div class="container hero__inner">
+    <a href="#implementasi" class="hero__eyebrow" data-hero-in style="--i:0">
+      <span class="pulse" aria-hidden="true"></span>
+      ERP modular untuk bisnis Indonesia
+      <Icon name="arrow" size={14} />
+    </a>
+
+    <h1 id="hero-title" class="hero__title">
+      <span class="w" style="--i:1"><span>Bisnis</span></span>{' '}
+      <span class="w" style="--i:2"><span><Scribble variant="squiggle" color="blue">berjalan.</Scribble></span></span>{' '}
+      <br class="hero__br" />
+      <span class="w" style="--i:3"><span>Semua</span></span>{' '}
+      <span class="w" style="--i:4"><span>alurnya</span></span>{' '}
+      <span class="w" style="--i:5"><span><Scribble variant="brush" color="green">tertata.</Scribble></span></span>
+    </h1>
+
+    <p class="hero__sub" data-hero-in style="--i:6">
+      Dari pembelian bahan, produksi, stok, hingga penjualan dan keuangan. Satu sistem yang mengikuti cara kerja bisnis Anda.
+    </p>
+
+    <div class="hero__ctas" data-hero-in style="--i:7">
+      <a href="#kontak" class="btn btn--primary btn--lg">
+        Diskusikan kebutuhan <Icon name="arrow" size={18} class="icon--arrow" />
+      </a>
+      <a href="#solusi" class="btn btn--lg">Lihat solusinya</a>
+    </div>
+
+    <ul class="hero__assure" data-hero-in style="--i:8">
+      <li><Icon name="server" size={16} /> Self-hosted atau private cloud</li>
+      <li><Icon name="shield" size={16} /> Instalasi independen per perusahaan</li>
+      <li class="hero__assure-x"><Icon name="layers" size={16} /> Modul sesuai kebutuhan</li>
+    </ul>
+  </div>
+</section>
+
+<style is:global>
+  .hero {
+    position: relative;
+    padding: clamp(3.5rem, 2rem + 6vw, 7rem) 0 clamp(2.5rem, 2rem + 2vw, 4rem);
+    text-align: center;
+    isolation: isolate;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: calc(var(--header-h) * -1) 0 -480px 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .hero__dots {
+    position: absolute;
+    inset: 0;
+    -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 30%, #000 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 55% at 50% 30%, #000 30%, transparent 75%);
+    opacity: 0.7;
+  }
+
+  .hero__blob {
+    position: absolute;
+    width: 560px;
+    height: 560px;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.5;
+    animation: blob 18s ease-in-out infinite alternate;
+  }
+
+  .hero__blob--b {
+    background: #bcd0f3;
+    top: -120px;
+    left: max(-160px, calc(50% - 760px));
+  }
+
+  .hero__blob--g {
+    background: #b5ead5;
+    top: 40px;
+    right: max(-160px, calc(50% - 760px));
+    animation-delay: -9s;
+  }
+
+  @keyframes blob {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, 30px) scale(1.08); }
+    100% { transform: translate(-30px, 10px) scale(0.95); }
+  }
+
+  .hero__flow {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 360px;
+    height: 520px;
+    opacity: 0.9;
+  }
+
+  .hero__flow path {
+    fill: none;
+    stroke-width: 26;
+    stroke-linecap: round;
+    stroke-dasharray: 1 0;
+  }
+
+  .hero__flow .f1 {
+    stroke: var(--blue);
+    opacity: 0.08;
+  }
+
+  .hero__flow .f2 {
+    stroke: var(--green);
+    opacity: 0.1;
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 14px 7px 12px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 0.86rem;
+    color: var(--ink-2);
+    transition: border-color 0.2s, box-shadow 0.25s, transform 0.25s var(--ease);
+  }
+
+  .hero__eyebrow:hover {
+    border-color: var(--green);
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+  }
+
+  .hero__eyebrow .icon {
+    color: var(--muted);
+    transition: transform 0.3s var(--ease);
+  }
+
+  .hero__eyebrow:hover .icon {
+    transform: translateX(3px);
+  }
+
+  .pulse {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  .pulse::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid var(--green);
+    animation: pulse 2s var(--ease) infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.6); opacity: 0.9; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+
+  .hero__title {
+    margin-top: 26px;
+    font-size: var(--fs-h1);
+    line-height: 1.04;
+    letter-spacing: -0.04em;
+  }
+
+  .hero__title .w {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding: 0.04em 0.04em 0.16em;
+    margin: -0.04em -0.04em -0.16em;
+  }
+
+  /* Animasi masuk murni CSS: tidak menunggu JavaScript sehingga LCP tetap cepat. */
+  .hero__title .w > span {
+    display: inline-block;
+    animation: word-up 1s var(--ease) both;
+    animation-delay: calc(var(--i) * 70ms + 80ms);
+  }
+
+  @keyframes word-up {
+    from { transform: translateY(105%); }
+  }
+
+  .hero__title .scribble svg {
+    z-index: -1;
+  }
+
+  /* Coretan pada judul hero digambar setelah kata muncul */
+  .hero__title .scribble path {
+    animation: draw-in 1.1s var(--ease) 0.9s both;
+  }
+
+  .hero__title .scribble--brush path {
+    animation-delay: 1.15s;
+  }
+
+  @keyframes draw-in {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  .hero__br {
+    display: block;
+  }
+
+  .hero__sub {
+    margin-top: 24px;
+    max-width: 640px;
+    font-size: var(--fs-lead);
+    color: var(--muted);
+  }
+
+  .hero__ctas {
+    margin-top: 34px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .hero__assure {
+    margin-top: 26px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 22px;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .hero__assure li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero__assure .icon {
+    color: var(--green);
+  }
+
+  [data-hero-in] {
+    animation: hero-in 0.9s var(--ease) both;
+    animation-delay: calc(var(--i) * 70ms + 120ms);
+  }
+
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+      filter: blur(4px);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero {
+      text-align: left;
+    }
+
+    .hero__inner {
+      align-items: flex-start;
+    }
+
+    .hero__title {
+      font-size: clamp(2.5rem, 1.2rem + 7.4vw, 3.9rem);
+    }
+
+    .hero__ctas {
+      justify-content: flex-start;
+      width: 100%;
+    }
+
+    .hero__ctas .btn {
+      flex: 1 1 100%;
+    }
+
+    .hero__assure {
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .hero__assure-x {
+      display: none !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__title .w > span,
+    [data-hero-in],
+    .hero__title .scribble path {
+      animation: none;
+    }
+
+    .hero__title .scribble path {
+      stroke-dashoffset: 0;
+    }
+
+    .hero__blob {
+      animation: none;
+    }
+  }
+</style>

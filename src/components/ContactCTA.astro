@@ -1,0 +1,434 @@
+---
+import Icon from './Icon.astro';
+import Scribble from './Scribble.astro';
+import { site, industries } from '../data/site';
+
+const hasEndpoint = Boolean(site.formEndpoint);
+---
+
+<section class="section cta" id="kontak" aria-labelledby="kontak-title">
+  <div class="container">
+    <div class="cta__panel" data-reveal="scale">
+      <svg class="cta__waves" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M-50 300 C 200 180, 380 420, 640 290 S 1050 160, 1260 250" />
+        <path d="M-50 350 C 200 230, 380 470, 640 340 S 1050 210, 1260 300" />
+      </svg>
+
+      <div class="cta__copy">
+        <img class="cta__mark" src="/assets/mark.webp" alt="" width="160" height="160" loading="lazy" decoding="async" />
+        <h2 id="kontak-title">Operasional makin jelas. Kerja makin <Scribble variant="underline">terarah.</Scribble></h2>
+        <p>Ceritakan alur bisnis Anda. Kita petakan sistem yang benar-benar dibutuhkan.</p>
+        <ul class="cta__steps">
+          <li><span>1</span> Kirim gambaran singkat kebutuhan</li>
+          <li><span>2</span> Diskusi untuk memahami alur bisnis</li>
+          <li><span>3</span> Usulan implementasi yang sesuai</li>
+        </ul>
+        <p class="cta__mail">
+          Atau email langsung: <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      </div>
+
+      <div class="cta__formwrap">
+        <form
+          class="lead"
+          data-lead
+          data-endpoint={site.formEndpoint}
+          data-email={site.email}
+          action={hasEndpoint ? site.formEndpoint : `mailto:${site.email}`}
+          method="post"
+          enctype={hasEndpoint ? undefined : 'text/plain'}
+          novalidate
+        >
+          <p class="lead__title">Diskusikan kebutuhan</p>
+          <div class="lead__row">
+            <div class="field">
+              <label for="f-nama">Nama</label>
+              <input id="f-nama" name="nama" type="text" autocomplete="name" required maxlength="80" placeholder="Nama Anda" />
+              <small class="field__err" aria-live="polite"></small>
+            </div>
+            <div class="field">
+              <label for="f-perusahaan">Perusahaan</label>
+              <input id="f-perusahaan" name="perusahaan" type="text" autocomplete="organization" required maxlength="100" placeholder="Nama usaha" />
+              <small class="field__err" aria-live="polite"></small>
+            </div>
+          </div>
+          <div class="lead__row">
+            <div class="field">
+              <label for="f-kontak">Email atau WhatsApp</label>
+              <input id="f-kontak" name="kontak" type="text" autocomplete="email" required maxlength="100" placeholder="nama@usaha.id / 08xx" />
+              <small class="field__err" aria-live="polite"></small>
+            </div>
+            <div class="field">
+              <label for="f-jenis">Jenis usaha</label>
+              <select id="f-jenis" name="jenis_usaha" required>
+                <option value="" selected disabled>Pilih jenis usaha</option>
+                {industries.map((i) => <option value={i.name}>{i.name}</option>)}
+                <option value="Lainnya">Lainnya</option>
+              </select>
+              <small class="field__err" aria-live="polite"></small>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-masalah">Gambaran kebutuhan atau masalah</label>
+            <textarea id="f-masalah" name="kebutuhan" rows="4" required minlength="10" maxlength="1000" placeholder="Contoh: stok bahan di 2 gudang sering tidak sesuai, progres produksi sulit dipantau…"></textarea>
+            <small class="field__err" aria-live="polite"></small>
+          </div>
+
+          <!-- Honeypot anti-spam (nama `_gotcha` dikenali Formspree): biarkan kosong -->
+          {hasEndpoint && <input type="hidden" name="_subject" value="Inquiry NataAlur dari nataalur.my.id" />}
+          <div class="hp" aria-hidden="true">
+            <label for="f-web">Website</label>
+            <input id="f-web" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <label class="check">
+            <input type="checkbox" name="persetujuan" required />
+            <span>Saya setuju data ini digunakan untuk menghubungi saya terkait kebutuhan implementasi, sesuai <a href="/kebijakan-privasi">kebijakan privasi</a>.</span>
+          </label>
+          <small class="field__err field__err--check" aria-live="polite"></small>
+
+          <button class="btn btn--primary btn--lg lead__submit" type="submit">
+            <span class="lead__label">Kirim & diskusikan</span>
+            <Icon name="arrow" size={18} class="icon--arrow" />
+            <span class="lead__spin" aria-hidden="true"></span>
+          </button>
+          <p class="lead__fine">Tanpa informasi sensitif atau detail finansial. Kami hanya perlu gambaran awal.</p>
+        </form>
+
+        <div class="lead__done" data-lead-done hidden tabindex="-1">
+          <svg class="lead__check" viewBox="0 0 52 52" aria-hidden="true">
+            <circle cx="26" cy="26" r="24" />
+            <path d="M15 27 l7 7 l15 -16" />
+          </svg>
+          <p class="lead__title">Terima kasih!</p>
+          <p data-lead-done-text>Pesan Anda sudah kami terima. Tim akan menghubungi melalui kontak yang Anda berikan.</p>
+          <button type="button" class="btn btn--sm" data-lead-reset>Kirim pesan lain</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .cta {
+    padding-top: calc(var(--section) * 0.6);
+  }
+
+  .cta__panel {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: clamp(2rem, 1rem + 3vw, 4rem);
+    padding: clamp(28px, 2rem + 3vw, 72px);
+    border-radius: 32px;
+    background:
+      radial-gradient(700px 400px at 0% 0%, #2a63c4 0%, transparent 60%),
+      radial-gradient(600px 400px at 100% 100%, #0aa57d 0%, transparent 60%),
+      linear-gradient(135deg, var(--blue), #0f5e8a 55%, var(--green));
+    color: #fff;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .cta__waves {
+    position: absolute;
+    inset: auto 0 0 0;
+    width: 100%;
+    height: 60%;
+    z-index: -1;
+  }
+
+  .cta__waves path {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 34;
+    stroke-linecap: round;
+    opacity: 0.07;
+  }
+
+  .cta__mark {
+    width: 54px;
+    height: 54px;
+    padding: 8px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.4);
+    margin-bottom: 26px;
+  }
+
+  .cta__copy h2 {
+    color: #fff;
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 3.3rem);
+  }
+
+  .cta__copy .scribble--green path {
+    stroke: #7ff0c9;
+  }
+
+  .cta__copy > p {
+    margin-top: 18px;
+    font-size: var(--fs-lead);
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  .cta__steps {
+    margin-top: 28px;
+    display: grid;
+    gap: 12px;
+  }
+
+  .cta__steps li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    color: rgb(255 255 255 / 0.92);
+  }
+
+  .cta__steps span {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 0.82rem;
+    background: rgb(255 255 255 / 0.16);
+    border: 1px solid rgb(255 255 255 / 0.3);
+    flex-shrink: 0;
+  }
+
+  .cta__mail {
+    margin-top: 28px !important;
+    font-size: 0.95rem !important;
+  }
+
+  .cta__mail a {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgb(255 255 255 / 0.5);
+  }
+
+  .cta__formwrap {
+    position: relative;
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: 22px;
+    padding: clamp(20px, 1rem + 1.5vw, 32px);
+    box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.45);
+  }
+
+  .lead {
+    display: grid;
+    gap: 14px;
+  }
+
+  .lead__title {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1.3rem;
+    letter-spacing: -0.015em;
+    margin-bottom: 2px;
+  }
+
+  .lead__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .field {
+    display: grid;
+    gap: 6px;
+  }
+
+  .field label {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    min-height: 46px;
+    padding: 10px 14px;
+    border: 1px solid var(--border-2);
+    border-radius: 11px;
+    background: var(--canvas);
+    font: inherit;
+    font-size: 0.98rem;
+    color: var(--ink);
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 110px;
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: #9aa6ac;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgb(21 75 164 / 0.14);
+  }
+
+  .field.is-invalid input,
+  .field.is-invalid select,
+  .field.is-invalid textarea {
+    border-color: var(--red);
+    box-shadow: 0 0 0 4px rgb(214 69 69 / 0.1);
+  }
+
+  .field__err {
+    min-height: 0;
+    font-size: 0.8rem;
+    color: var(--red);
+  }
+
+  .field__err:empty {
+    display: none;
+  }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .check {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 0.85rem;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .check input {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--blue);
+    flex-shrink: 0;
+  }
+
+  .check a {
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .lead__submit {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .lead__spin {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgb(255 255 255 / 0.4);
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .lead.is-sending .lead__spin {
+    display: block;
+  }
+
+  .lead.is-sending .icon--arrow {
+    display: none;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .lead__fine {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .lead__done {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+    min-height: 420px;
+    outline: none;
+  }
+
+  .lead__done[hidden] {
+    display: none;
+  }
+
+  .lead__done p:not(.lead__title) {
+    color: var(--muted);
+    max-width: 340px;
+  }
+
+  .lead__check {
+    width: 76px;
+    height: 76px;
+  }
+
+  .lead__check circle {
+    fill: var(--green-50);
+    stroke: var(--green);
+    stroke-width: 2.5;
+    stroke-dasharray: 151;
+    stroke-dashoffset: 151;
+    animation: draw 0.8s var(--ease) forwards;
+  }
+
+  .lead__check path {
+    fill: none;
+    stroke: var(--green);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    animation: draw 0.5s var(--ease) 0.6s forwards;
+  }
+
+  @keyframes draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @media (max-width: 960px) {
+    .cta__panel {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .cta__panel {
+      border-radius: 24px;
+      margin-inline: calc(var(--gutter) * -0.5);
+    }
+
+    .lead__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

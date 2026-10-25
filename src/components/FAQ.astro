@@ -1,0 +1,131 @@
+---
+import Icon from './Icon.astro';
+import { faqs } from '../data/site';
+---
+
+<section class="section faq" id="faq" aria-labelledby="faq-title">
+  <div class="container faq__grid">
+    <div class="faq__side" data-reveal>
+      <span class="eyebrow">FAQ</span>
+      <h2 id="faq-title">Pertanyaan yang sering diajukan.</h2>
+      <p>Belum menemukan jawabannya? Ceritakan kebutuhan Anda, kami bantu jelaskan.</p>
+      <a href="#kontak" class="link-arrow">Tanyakan langsung <Icon name="arrow" size={16} class="icon--arrow" /></a>
+    </div>
+
+    <div class="faq__list">
+      {faqs.map((f, i) => (
+        <details class="qa" data-reveal style={`--d:${i * 70}`} open={i === 0}>
+          <summary>
+            <h3>{f.q}</h3>
+            <span class="qa__ico" aria-hidden="true"><Icon name="plus" size={18} stroke={2.2} /></span>
+          </summary>
+          <div class="qa__body">
+            <p>{f.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .faq__grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(2rem, 1rem + 4vw, 5rem);
+    align-items: start;
+  }
+
+  .faq__side {
+    position: sticky;
+    top: calc(var(--header-h) + 32px);
+  }
+
+  .faq__side h2 {
+    font-size: var(--fs-h2);
+    margin-top: 14px;
+  }
+
+  .faq__side p {
+    margin: 18px 0 20px;
+    color: var(--muted);
+    font-size: var(--fs-lead);
+  }
+
+  .faq__list {
+    border-top: 1px solid var(--border);
+  }
+
+  .qa {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .qa summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px 4px;
+    cursor: pointer;
+    list-style: none;
+    border-radius: 8px;
+  }
+
+  .qa summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .qa h3 {
+    font-size: clamp(1.06rem, 1rem + 0.35vw, 1.25rem);
+    letter-spacing: -0.015em;
+    line-height: 1.35;
+    transition: color 0.2s;
+  }
+
+  .qa summary:hover h3 {
+    color: var(--blue);
+  }
+
+  .qa__ico {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border-2);
+    color: var(--ink);
+    transition: transform 0.4s var(--ease), background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+
+  .qa[open] .qa__ico {
+    transform: rotate(45deg);
+    background: var(--blue);
+    color: #fff;
+    border-color: var(--blue);
+  }
+
+  .qa__body {
+    overflow: hidden;
+  }
+
+  .qa__body p {
+    padding: 0 60px 26px 4px;
+    color: var(--muted);
+    font-size: 1.02rem;
+  }
+
+  @media (max-width: 860px) {
+    .faq__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .faq__side {
+      position: static;
+    }
+
+    .qa__body p {
+      padding-right: 4px;
+    }
+  }
+</style>

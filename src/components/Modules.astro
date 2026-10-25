@@ -1,0 +1,288 @@
+---
+import Icon from './Icon.astro';
+import Scribble from './Scribble.astro';
+import { modules } from '../data/site';
+
+const nameOf = Object.fromEntries(modules.map((m) => [m.id, m.name]));
+---
+
+<section class="section modules" id="fitur" aria-labelledby="fitur-title">
+  <div class="container">
+    <div class="modules__head">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">Modul</span>
+        <h2 id="fitur-title">Pilih yang bisnis Anda <Scribble variant="circle">butuhkan.</Scribble></h2>
+        <p>Modular, saling terhubung, dan bisa disesuaikan dengan proses kerja perusahaan.</p>
+      </div>
+      <p class="modules__hint" data-reveal style="--d:120" aria-live="polite" data-mod-hint>
+        <span class="modules__hint-dot" aria-hidden="true"></span>
+        <span data-mod-hint-text>Arahkan atau fokus ke modul untuk melihat keterhubungannya.</span>
+      </p>
+    </div>
+
+    <ul class="modules__grid" data-modules>
+      {modules.map((m, i) => (
+        <li
+          class="mcard"
+          id={`modul-${m.id}`}
+          style={`--hue:${m.hue};--d:${(i % 4) * 80 + Math.floor(i / 4) * 120}`}
+          data-reveal
+          data-mod={m.id}
+          data-links={m.links.join(',')}
+          data-linknames={m.links.map((l) => nameOf[l]).join(', ')}
+          data-name={m.name}
+          tabindex="0"
+        >
+          <span class="mcard__app" aria-hidden="true">
+            <Icon name={m.icon} size={26} stroke={1.8} />
+          </span>
+          <h3>{m.name}</h3>
+          <p>{m.desc}</p>
+          <span class="mcard__tag" aria-hidden="true"><Icon name="route" size={12} /> Terhubung</span>
+        </li>
+      ))}
+    </ul>
+
+    <p class="modules__note" data-reveal>
+      <Icon name="layers" size={16} />
+      Modul dirancang untuk dipilih bertahap. Ketersediaan tiap modul mengikuti tahap pengembangan dan ruang lingkup implementasi yang disepakati.
+    </p>
+  </div>
+</section>
+
+<style is:global>
+  .modules {
+    background:
+      radial-gradient(800px 400px at 90% 0%, rgb(7 159 119 / 0.06), transparent 70%),
+      radial-gradient(700px 420px at 0% 100%, rgb(21 75 164 / 0.06), transparent 70%),
+      var(--surface);
+    border-block: 1px solid var(--border);
+  }
+
+  .modules__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 32px;
+    margin-bottom: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  }
+
+  .modules__head .section-head {
+    margin-bottom: 0;
+  }
+
+  .modules__hint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 340px;
+    min-height: 3.2em;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: var(--canvas);
+    border: 1px dashed var(--border-2);
+    font-size: 0.86rem;
+    color: var(--muted);
+    transition: border-color 0.3s, color 0.3s, background-color 0.3s;
+  }
+
+  .modules__hint.is-on {
+    border-style: solid;
+    border-color: var(--green);
+    background: var(--green-50);
+    color: var(--ink-2);
+  }
+
+  .modules__hint-dot {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 4px var(--green-100);
+  }
+
+  .modules__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .mcard {
+    position: relative;
+    padding: 24px 22px 26px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    cursor: default;
+    outline: none;
+    transition:
+      transform 0.4s var(--ease),
+      box-shadow 0.4s var(--ease),
+      border-color 0.3s,
+      opacity 0.3s,
+      filter 0.3s;
+  }
+
+  .mcard:hover,
+  .mcard:focus-visible,
+  .mcard.is-focus {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--hue) 40%, white);
+    box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--hue) 55%, transparent);
+  }
+
+  .mcard:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--hue) 45%, white);
+    outline-offset: 2px;
+  }
+
+  /* Ikon aplikasi bergaya tile warna-warni (Odoo-like) */
+  .mcard__app {
+    width: 60px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    color: #fff;
+    background:
+      linear-gradient(145deg, color-mix(in srgb, var(--hue) 78%, white), var(--hue) 60%, color-mix(in srgb, var(--hue) 85%, black));
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.35),
+      0 10px 18px -10px color-mix(in srgb, var(--hue) 80%, transparent);
+    margin-bottom: 20px;
+    transition: transform 0.5s var(--ease-spring);
+  }
+
+  .mcard:hover .mcard__app,
+  .mcard:focus-visible .mcard__app,
+  .mcard.is-focus .mcard__app {
+    transform: translateY(-4px) rotate(-6deg) scale(1.06);
+  }
+
+  .mcard h3 {
+    font-size: var(--fs-h3);
+  }
+
+  .mcard p {
+    margin-top: 8px;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+
+  .mcard__tag {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--green-600);
+    background: var(--green-50);
+    opacity: 0;
+    transform: translateY(-4px) scale(0.9);
+    transition: opacity 0.25s, transform 0.3s var(--ease-spring);
+  }
+
+  /* Status keterhubungan */
+  .modules__grid.is-linking .mcard {
+    opacity: 0.45;
+    filter: saturate(0.4);
+  }
+
+  .modules__grid.is-linking .mcard.is-focus,
+  .modules__grid.is-linking .mcard.is-linked {
+    opacity: 1;
+    filter: none;
+  }
+
+  .modules__grid.is-linking .mcard.is-linked {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px var(--green-100);
+  }
+
+  .modules__grid .mcard.is-linked .mcard__tag {
+    opacity: 1;
+    transform: none;
+  }
+
+  .mcard.is-ping {
+    animation: ping-ring 1.4s var(--ease) 2;
+  }
+
+  @keyframes ping-ring {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--hue) 50%, transparent); }
+    100% { box-shadow: 0 0 0 18px transparent; }
+  }
+
+  .modules__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 28px;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .modules__note .icon {
+    flex-shrink: 0;
+    margin-top: 3px;
+    color: var(--blue);
+  }
+
+  @media (max-width: 1024px) {
+    .modules__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .modules__head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .modules__hint {
+      max-width: none;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .modules__grid {
+      gap: 12px;
+    }
+
+    .mcard {
+      padding: 18px 16px 20px;
+    }
+
+    .mcard__app {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+    }
+
+    .mcard__app .icon {
+      width: 22px;
+      height: 22px;
+    }
+
+    .mcard h3 {
+      font-size: 1rem;
+    }
+
+    .mcard p {
+      font-size: 0.85rem;
+    }
+
+    .mcard__tag {
+      display: none;
+    }
+  }
+</style>

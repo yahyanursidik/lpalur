@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title="Kebijakan Privasi — NataAlur"
+  description="Cara NataAlur menggunakan data kontak yang Anda kirim melalui formulir di nataalur.my.id."
+>
+  <article class="container legal">
+    <p class="eyebrow">Draf — perlu ditinjau sebelum publikasi</p>
+    <h1>Kebijakan privasi</h1>
+    <p class="legal__lead">
+      Halaman ini menjelaskan bagaimana data yang Anda kirim melalui formulir di {site.url.replace('https://', '')} digunakan.
+    </p>
+
+    <h2>Data yang dikumpulkan</h2>
+    <p>Nama, nama perusahaan, kontak (email atau nomor WhatsApp), jenis usaha, dan gambaran kebutuhan yang Anda tulis sendiri. Kami tidak meminta informasi sensitif atau detail finansial pada kontak pertama.</p>
+
+    <h2>Tujuan penggunaan</h2>
+    <p>Data hanya digunakan untuk menghubungi Anda terkait kebutuhan implementasi NataAlur, menjadwalkan diskusi, dan menyiapkan usulan.</p>
+
+    <h2>Penyimpanan dan berbagi</h2>
+    <p>Data tidak dijual atau dibagikan kepada pihak lain untuk pemasaran. Data disimpan selama diperlukan untuk komunikasi terkait permintaan Anda.</p>
+
+    <h2>Analitik dan cookie</h2>
+    <p>Saat ini situs tidak memasang analitik atau cookie pelacakan. Jika nanti digunakan, halaman ini akan diperbarui dan persetujuan akan diminta sesuai ketentuan yang berlaku.</p>
+
+    <h2>Hak Anda</h2>
+    <p>Anda dapat meminta data Anda diperbaiki atau dihapus dengan menghubungi <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+
+    <p class="legal__back"><a class="link-arrow" href="/">← Kembali ke beranda</a></p>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal {
+    max-width: 760px;
+    padding-block: clamp(3rem, 2rem + 4vw, 6rem) var(--section);
+  }
+
+  h1 {
+    font-size: clamp(2.2rem, 1.6rem + 2.4vw, 3.4rem);
+    margin-top: 14px;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+    margin-top: 36px;
+  }
+
+  p {
+    margin-top: 12px;
+    color: var(--ink-2);
+  }
+
+  .legal__lead {
+    font-size: var(--fs-lead);
+    color: var(--muted);
+    margin-top: 18px;
+  }
+
+  a {
+    color: var(--blue);
+  }
+
+  .legal__back {
+    margin-top: 48px;
+  }
+</style>

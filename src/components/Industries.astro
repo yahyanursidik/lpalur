@@ -1,0 +1,617 @@
+---
+import Icon from './Icon.astro';
+import Scribble from './Scribble.astro';
+import { industries } from '../data/site';
+
+const bom = [
+  { m: 'Plat kuningan 1 mm', need: '12 lbr', have: '40 lbr', ok: true },
+  { m: 'Pita medali merah', need: '120 m', have: '86 m', ok: false },
+  { m: 'Cat enamel emas', need: '2 kg', have: '5 kg', ok: true },
+  { m: 'Kotak beludru', need: '120 pcs', have: '150 pcs', ok: true },
+];
+const sizes = ['S', 'M', 'L', 'XL'];
+const colors = ['Navy', 'Hitam', 'Putih'];
+const matrix = [
+  [12, 8, 6],
+  [24, 16, 10],
+  [20, 14, 8],
+  [8, 6, 4],
+];
+const locs = [
+  { n: 'Gudang Pusat', v: 82, s: '1.240 pcs', tone: 'blue' },
+  { n: 'Toko 1', v: 46, s: '380 pcs', tone: 'green' },
+  { n: 'Toko 2', v: 14, s: '96 pcs', tone: 'amber' },
+];
+---
+
+<section class="section ind" id="industri" aria-labelledby="industri-title">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Industri</span>
+      <h2 id="industri-title">Bisnis berbeda. Alur tetap bisa <Scribble variant="brush">tertata.</Scribble></h2>
+    </div>
+
+    <div class="ind__wrap" data-ind>
+      <div class="ind__tabs" role="tablist" aria-orientation="vertical" aria-label="Jenis usaha" data-reveal>
+        {industries.map((ind, i) => (
+          <button
+            class="itab"
+            type="button"
+            role="tab"
+            id={`ind-tab-${ind.id}`}
+            data-ind-id={ind.id}
+            aria-controls={`ind-panel-${ind.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+          >
+            <span class="itab__ico"><Icon name={ind.icon} size={20} /></span>
+            <span class="itab__txt">
+              <strong>{ind.name}</strong>
+              <span class="itab__desc">{ind.desc}</span>
+              <ul class="itab__pts">
+                {ind.points.map((p) => <li><Icon name="check" size={14} stroke={2.6} /> {p}</li>)}
+              </ul>
+            </span>
+            <i class="itab__prog" aria-hidden="true"></i>
+          </button>
+        ))}
+      </div>
+
+      <div class="ind__stage" data-reveal="scale" style="--d:120">
+        <!-- Manufaktur -->
+        <div class="ipanel is-active" role="tabpanel" id="ind-panel-manufaktur" aria-labelledby="ind-tab-manufaktur">
+          <div class="icard">
+            <div class="icard__h">
+              <div><small>Perintah kerja</small><strong>WO-0231 · Medali kegiatan</strong></div>
+              <span class="ibadge blue">Dikerjakan</span>
+            </div>
+            <div class="istages">
+              {['Material', 'Cetak', 'Finishing', 'QC', 'Barang jadi'].map((s, k) => (
+                <span class:list={['istage', { done: k < 2, now: k === 2 }]} style={`--k:${k}`}>{s}</span>
+              ))}
+            </div>
+            <p class="icard__sub">Kebutuhan material</p>
+            <div class="ibom">
+              {bom.map((b, k) => (
+                <div class="ibom__r" style={`--k:${k}`}>
+                  <span class="ibom__m">{b.m}</span>
+                  <span>Butuh {b.need}</span>
+                  <span>Stok {b.have}</span>
+                  <span class:list={['ibadge', b.ok ? 'green' : 'amber']}>{b.ok ? 'Cukup' : 'Perlu beli'}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Konveksi -->
+        <div class="ipanel" role="tabpanel" id="ind-panel-konveksi" aria-labelledby="ind-tab-konveksi" hidden>
+          <div class="icard">
+            <div class="icard__h">
+              <div><small>Pesanan custom</small><strong>SO-0098 · Kemeja seragam</strong></div>
+              <span class="ibadge amber">Material dicek</span>
+            </div>
+            <div class="imatrix">
+              <span></span>
+              {colors.map((c) => <span class="imatrix__h"><i class={`sw sw--${c.toLowerCase()}`}></i>{c}</span>)}
+              {sizes.map((sz, r) => (
+                <>
+                  <span class="imatrix__h">{sz}</span>
+                  {matrix[r].map((v, c) => <span class="imatrix__c" style={`--k:${r * 3 + c};--a:${v / 24}`}>{v}</span>)}
+                </>
+              ))}
+            </div>
+            <div class="imeta">
+              <span><Icon name="layers" size={14} /> 12 varian</span>
+              <span><Icon name="package" size={14} /> Kain drill · 168 m</span>
+              <span><Icon name="wrench" size={14} /> Bordir logo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Distributor -->
+        <div class="ipanel" role="tabpanel" id="ind-panel-distributor" aria-labelledby="ind-tab-distributor" hidden>
+          <div class="icard">
+            <div class="icard__h">
+              <div><small>Stok per lokasi</small><strong>Pin souvenir emas</strong></div>
+              <span class="ibadge green">3 lokasi</span>
+            </div>
+            <div class="ilocs">
+              {locs.map((l, k) => (
+                <div class="iloc" style={`--k:${k}`}>
+                  <span class="iloc__ico"><Icon name={k === 0 ? 'building' : 'store'} size={18} /></span>
+                  <div class="iloc__b">
+                    <p><strong>{l.n}</strong><span>{l.s}</span></p>
+                    <div class="mk-prog"><span class={l.tone} style={`--p:${l.v}%`}></span></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div class="isuggest">
+              <Icon name="migrate" size={16} />
+              <span>Saran transfer: <strong>120 pcs</strong> Gudang Pusat → Toko 2</span>
+            </div>
+          </div>
+        </div>
+
+        <span class="label-illustration ind__label">Ilustrasi — data contoh</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .ind__wrap {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(1.5rem, 1rem + 3vw, 4rem);
+    align-items: start;
+  }
+
+  .ind__tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .itab {
+    position: relative;
+    display: flex;
+    gap: 16px;
+    text-align: left;
+    padding: 20px 22px;
+    border: 1px solid transparent;
+    border-radius: var(--r-lg);
+    background: transparent;
+    overflow: hidden;
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .itab:hover {
+    background: rgb(23 43 56 / 0.03);
+  }
+
+  .itab[aria-selected='true'] {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .itab__ico {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    background: var(--surface-2);
+    color: var(--muted);
+    transition: background-color 0.3s, color 0.3s, transform 0.4s var(--ease-spring);
+  }
+
+  .itab[aria-selected='true'] .itab__ico {
+    background: var(--green);
+    color: #fff;
+    transform: rotate(-6deg);
+  }
+
+  .itab strong {
+    display: block;
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    color: var(--muted);
+    transition: color 0.3s;
+  }
+
+  .itab[aria-selected='true'] strong {
+    color: var(--ink);
+  }
+
+  .itab__desc {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 0.98rem;
+  }
+
+  .itab__pts {
+    display: block;
+    max-height: 0;
+    margin-top: 0;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s var(--ease), opacity 0.4s, margin-top 0.5s var(--ease);
+  }
+
+  .itab[aria-selected='true'] .itab__pts {
+    max-height: 120px;
+    opacity: 1;
+    margin-top: 12px;
+  }
+
+  .itab__pts li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 0;
+  }
+
+  .itab__pts .icon {
+    color: var(--green);
+  }
+
+  .itab__prog {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--green));
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    opacity: 0;
+  }
+
+  .ind.is-auto .itab[aria-selected='true'] .itab__prog {
+    opacity: 1;
+    animation: pv-prog var(--ind-dur, 6500ms) linear forwards;
+    animation-play-state: var(--ind-play, running);
+  }
+
+  /* Panggung visual */
+  .ind__stage {
+    position: relative;
+    min-height: 440px;
+    border-radius: var(--r-xl);
+    padding: clamp(18px, 3vw, 40px);
+    background:
+      radial-gradient(circle at 20% 10%, rgb(21 75 164 / 0.12), transparent 50%),
+      radial-gradient(circle at 90% 90%, rgb(7 159 119 / 0.14), transparent 50%),
+      var(--surface-2);
+    border: 1px solid var(--border);
+    display: grid;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .ind__stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgb(23 43 56 / 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    -webkit-mask-image: linear-gradient(#000, transparent 80%);
+    mask-image: linear-gradient(#000, transparent 80%);
+  }
+
+  .ipanel {
+    grid-area: 1 / 1;
+    position: relative;
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+    transition: opacity 0.5s var(--ease), transform 0.6s var(--ease), visibility 0.5s;
+    visibility: hidden;
+  }
+
+  .ipanel[hidden] {
+    display: block;
+  }
+
+  .ipanel.is-active {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+  }
+
+  .ind__label {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .icard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 22px;
+  }
+
+  .icard__h {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .icard__h small {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .icard__h strong {
+    font-family: var(--font-head);
+    font-size: 1.08rem;
+  }
+
+  .icard__sub {
+    margin: 18px 0 8px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 0.86rem;
+  }
+
+  .ibadge {
+    flex-shrink: 0;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .ibadge.blue { background: var(--blue-50); color: var(--blue); }
+  .ibadge.green { background: var(--green-50); color: var(--green-600); }
+  .ibadge.amber { background: #fdf1e3; color: #9a5716; }
+
+  .istages {
+    display: flex;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .istage {
+    flex: 1;
+    position: relative;
+    padding-top: 12px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .istage::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    border-radius: 5px;
+    background: var(--border);
+  }
+
+  .istage.done::before { background: var(--green); }
+  .istage.done { color: var(--ink-2); }
+
+  .istage.now::before {
+    background: linear-gradient(90deg, var(--blue) 50%, var(--border) 50%);
+    background-size: 200% 100%;
+    animation: now-bar 2s var(--ease) infinite alternate;
+  }
+
+  .istage.now {
+    color: var(--blue);
+  }
+
+  @keyframes now-bar {
+    from { background-position: 100% 0; }
+    to { background-position: 30% 0; }
+  }
+
+  .ibom {
+    display: grid;
+    gap: 6px;
+  }
+
+  .ibom__r {
+    display: grid;
+    grid-template-columns: 1.4fr 0.9fr 0.9fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 9px 12px;
+    border-radius: 10px;
+    background: var(--canvas);
+    border: 1px solid var(--border);
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .ibom__m {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .imatrix {
+    display: grid;
+    grid-template-columns: 52px repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 18px;
+  }
+
+  .imatrix__h {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--ink-2);
+    padding: 6px 0;
+  }
+
+  .sw {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border-2);
+  }
+
+  .sw--navy { background: #1f2f5c; }
+  .sw--hitam { background: #1d1d1f; }
+  .sw--putih { background: #fff; }
+
+  .imatrix__c {
+    display: grid;
+    place-items: center;
+    height: 40px;
+    border-radius: 9px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: color-mix(in srgb, var(--green) calc(var(--a) * 38%), white);
+    border: 1px solid color-mix(in srgb, var(--green) calc(var(--a) * 30%), var(--border));
+  }
+
+  .imeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .imeta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  .imeta .icon {
+    color: var(--green);
+  }
+
+  .ilocs {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .iloc {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--canvas);
+  }
+
+  .iloc__ico {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    display: grid;
+    place-items: center;
+    background: var(--blue-50);
+    color: var(--blue);
+    flex-shrink: 0;
+  }
+
+  .iloc__b {
+    flex: 1;
+  }
+
+  .iloc__b p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.86rem;
+  }
+
+  .iloc__b p span {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .iloc .mk-prog {
+    height: 7px;
+    margin: 7px 0 0;
+  }
+
+  .isuggest {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--green-50);
+    color: var(--green-600);
+    font-size: 0.86rem;
+  }
+
+  .isuggest span {
+    color: var(--ink-2);
+  }
+
+  /* Animasi isi panel */
+  .ipanel .ibom__r,
+  .ipanel .imatrix__c,
+  .ipanel .iloc,
+  .ipanel .istage {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    transition-delay: calc(var(--k) * 45ms + 200ms);
+  }
+
+  .ipanel.is-active .ibom__r,
+  .ipanel.is-active .imatrix__c,
+  .ipanel.is-active .iloc,
+  .ipanel.is-active .istage {
+    opacity: 1;
+    transform: none;
+  }
+
+  .ipanel .mk-prog span {
+    transform: scaleX(0);
+  }
+
+  .ipanel.is-active .mk-prog span {
+    transform: none;
+    transition-delay: 0.5s;
+  }
+
+  @media (max-width: 960px) {
+    .ind__wrap {
+      grid-template-columns: 1fr;
+    }
+
+    .ind__stage {
+      min-height: 0;
+      padding-bottom: 60px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .ibom__r {
+      grid-template-columns: 1fr auto;
+    }
+
+    .ibom__r > span:nth-child(2),
+    .ibom__r > span:nth-child(3) {
+      display: none;
+    }
+
+    .istage {
+      font-size: 0.64rem;
+    }
+
+    .itab {
+      padding: 16px;
+    }
+  }
+</style>

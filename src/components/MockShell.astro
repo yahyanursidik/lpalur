@@ -1,0 +1,47 @@
+---
+// Kerangka aplikasi tiruan (ilustrasi) yang meniru tampilan NataAlur. Ukuran desain 1280×613, diskalakan via --s.
+import Icon from './Icon.astro';
+import type { IconName } from '../data/site';
+
+interface Props {
+  active: string;
+}
+const { active } = Astro.props;
+
+const items: { label: string; icon: IconName }[] = [
+  { label: 'Ringkasan', icon: 'layers' },
+  { label: 'Produk jadi', icon: 'package' },
+  { label: 'Produksi', icon: 'factory' },
+  { label: 'Gudang', icon: 'building' },
+  { label: 'Pembelian', icon: 'cart' },
+  { label: 'Penjualan', icon: 'receipt' },
+  { label: 'Keuangan', icon: 'wallet' },
+  { label: 'Laporan', icon: 'chart' },
+];
+---
+
+<div class="mock" aria-hidden="true">
+  <div class="mock__top">
+    <span class="mock__menu">‹ Menu</span>
+    <img src="/assets/logo-horizontal.webp" alt="" width="720" height="178" loading="lazy" decoding="async" />
+    <span class="mock__search"><Icon name="search" size={14} /> Cari</span>
+    <span class="mock__bell"><Icon name="bell" size={16} /></span>
+    <span class="mock__avatar">NA</span>
+  </div>
+  <div class="mock__body">
+    <aside class="mock__side">
+      <p class="mock__side-h">Navigasi</p>
+      <ul>
+        {items.map((it) => (
+          <li class:list={[{ 'is-active': it.label === active }]}>
+            <Icon name={it.icon} size={15} />
+            {it.label}
+          </li>
+        ))}
+      </ul>
+    </aside>
+    <div class="mock__main">
+      <slot />
+    </div>
+  </div>
+</div>

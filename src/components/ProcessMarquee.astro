@@ -1,0 +1,109 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '../data/site';
+
+const steps: { t: string; i: IconName }[] = [
+  { t: 'Pengajuan pembelian', i: 'clipboard' },
+  { t: 'Purchase order', i: 'cart' },
+  { t: 'Penerimaan barang', i: 'inbox' },
+  { t: 'Stok per lokasi', i: 'package' },
+  { t: 'Perintah produksi', i: 'factory' },
+  { t: 'Quality control', i: 'clipcheck' },
+  { t: 'Scan barcode & QR', i: 'qr' },
+  { t: 'Packing & surat jalan', i: 'truck' },
+  { t: 'Invoice & POS', i: 'receipt' },
+  { t: 'Kas, bank & jurnal', i: 'book' },
+  { t: 'Laporan', i: 'chart' },
+];
+---
+
+<div class="marquee" aria-label="Contoh alur proses yang dirancang terhubung di NataAlur">
+  <ul class="sr-only">
+    {steps.map((s) => <li>{s.t}</li>)}
+  </ul>
+  <div class="marquee__track" aria-hidden="true">
+    {[0, 1].map(() => (
+      <div class="marquee__group">
+        {steps.map((s) => (
+          <span class="marquee__item">
+            <Icon name={s.i} size={16} />
+            {s.t}
+            <svg class="marquee__sep" width="22" height="10" viewBox="0 0 22 10"><path d="M1 5 C 6 0, 10 10, 15 5 S 19 2, 21 5" /></svg>
+          </span>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>
+
+<style is:global>
+  .marquee {
+    position: relative;
+    padding: 22px 0;
+    border-block: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee 48s linear infinite;
+  }
+
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__group {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding-inline: 14px;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+
+  .marquee__item > .icon {
+    color: var(--blue);
+  }
+
+  .marquee__item:nth-child(even) > .icon {
+    color: var(--green);
+  }
+
+  .marquee__sep {
+    margin-left: 14px;
+  }
+
+  .marquee__sep path {
+    fill: none;
+    stroke: var(--border-2);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+    }
+
+    .marquee {
+      overflow-x: auto;
+    }
+  }
+</style>

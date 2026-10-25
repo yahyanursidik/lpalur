@@ -1,0 +1,1165 @@
+---
+import Icon from './Icon.astro';
+import MockShell from './MockShell.astro';
+
+const tabs = [
+  { id: 'ringkasan', label: 'Ringkasan', icon: 'layers', caption: 'Ilustrasi tampilan — data contoh' },
+  { id: 'katalog', label: 'Katalog produk', icon: 'package', caption: 'Tangkapan layar aplikasi dalam pengembangan — data demo' },
+  { id: 'produksi', label: 'Produksi', icon: 'factory', caption: 'Ilustrasi tampilan — data contoh' },
+  { id: 'gudang', label: 'Gudang', icon: 'building', caption: 'Ilustrasi tampilan — data contoh' },
+] as const;
+
+const bars = [
+  { m: 'Mei', v: 52 }, { m: 'Jun', v: 61 }, { m: 'Jul', v: 48 },
+  { m: 'Agu', v: 70 }, { m: 'Sep', v: 66 }, { m: 'Okt', v: 84 },
+];
+
+const jobs = [
+  { wo: 'WO-0231', item: 'Medali kegiatan', qty: '120 pcs', p: 72, st: 'Dikerjakan', tone: 'blue' },
+  { wo: 'WO-0232', item: 'Pin souvenir emas', qty: '300 pcs', p: 40, st: 'Dikerjakan', tone: 'blue' },
+  { wo: 'WO-0228', item: 'Pangkat custom instansi', qty: '80 set', p: 92, st: 'QC', tone: 'amber' },
+  { wo: 'WO-0225', item: 'Plakat penghargaan', qty: '25 pcs', p: 100, st: 'Selesai', tone: 'green' },
+];
+
+const kanban = [
+  { col: 'Antre', tone: 'muted', cards: [
+    { wo: 'WO-0236', t: 'Gantungan kunci logo', q: '500 pcs', d: 'Mulai 28 Okt' },
+    { wo: 'WO-0235', t: 'Lencana nama', q: '60 pcs', d: 'Material siap' },
+  ] },
+  { col: 'Dikerjakan', tone: 'blue', cards: [
+    { wo: 'WO-0231', t: 'Medali kegiatan', q: '120 pcs', d: 'Cetak & finishing', p: 72 },
+    { wo: 'WO-0232', t: 'Pin souvenir emas', q: '300 pcs', d: 'Plating', p: 40 },
+  ] },
+  { col: 'QC', tone: 'amber', cards: [
+    { wo: 'WO-0228', t: 'Pangkat custom instansi', q: '80 set', d: 'Cek ukuran & warna', p: 92 },
+  ] },
+  { col: 'Selesai', tone: 'green', cards: [
+    { wo: 'WO-0225', t: 'Plakat penghargaan', q: '25 pcs', d: 'Masuk gudang' },
+    { wo: 'WO-0224', t: 'Medali lomba', q: '90 pcs', d: 'Masuk gudang' },
+  ] },
+];
+
+const moves = [
+  { d: '25 Okt', doc: 'GRN-0418', item: 'Plat kuningan 1 mm', loc: 'Gudang Utama', q: '+40 lbr', tone: 'in' },
+  { d: '25 Okt', doc: 'MO-0231', item: 'Pita medali merah', loc: 'Workshop', q: '−120 m', tone: 'out' },
+  { d: '24 Okt', doc: 'TRF-0087', item: 'Pin souvenir emas', loc: 'Utama → Toko', q: '60 pcs', tone: 'trf' },
+  { d: '24 Okt', doc: 'DO-0152', item: 'Medali kegiatan', loc: 'Gudang Utama', q: '−50 pcs', tone: 'out' },
+  { d: '23 Okt', doc: 'ADJ-0012', item: 'Kotak beludru', loc: 'Gudang Utama', q: '+3 pcs', tone: 'adj' },
+];
+---
+
+<section class="pv" id="produk" aria-label="Pratinjau aplikasi NataAlur">
+  <div class="container">
+    <div class="pv__tabs" role="tablist" aria-label="Pilih tampilan" data-reveal style="--d:100">
+      {tabs.map((t, i) => (
+        <button
+          class="pv__tab"
+          type="button"
+          role="tab"
+          id={`pv-tab-${t.id}`}
+          aria-controls={`pv-panel-${t.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+          data-caption={t.caption}
+        >
+          <Icon name={t.icon} size={16} />
+          <span>{t.label}</span>
+          <i class="pv__prog" aria-hidden="true"></i>
+        </button>
+      ))}
+    </div>
+
+    <div class="pv__stage" data-tilt data-reveal="scale" style="--d:200">
+      <div class="pv__window">
+        <div class="pv__bar" aria-hidden="true">
+          <span class="pv__dots"><i></i><i></i><i></i></span>
+          <span class="pv__url"><Icon name="lock" size={12} /> erp.perusahaan-anda.id</span>
+          <span class="pv__bar-r"></span>
+        </div>
+
+        <div class="pv__screen" data-pv-screen>
+          <!-- 1. Ringkasan (ilustrasi) -->
+          <div class="pv__panel is-active" role="tabpanel" id="pv-panel-ringkasan" aria-labelledby="pv-tab-ringkasan">
+            <p class="sr-only">Ilustrasi dashboard ringkasan: penjualan, pesanan aktif, produksi berjalan, nilai persediaan, dan status pekerjaan. Data contoh.</p>
+            <div class="mock-scale">
+              <MockShell active="Ringkasan">
+                <div class="mk-head">
+                  <div>
+                    <p class="mk-crumb">Ringkasan</p>
+                    <p class="mk-h">Ringkasan operasional</p>
+                  </div>
+                  <div class="mk-seg"><span>Hari ini</span><span>Minggu</span><span class="on">Bulan</span></div>
+                </div>
+                <div class="mk-kpis">
+                  <div class="mk-kpi a"><p>Penjualan bulan ini</p><strong>Rp 248,6 jt</strong><span class="up">▲ 12,4% dari bulan lalu</span></div>
+                  <div class="mk-kpi a"><p>Pesanan aktif</p><strong>37</strong><span>8 siap dikirim</span></div>
+                  <div class="mk-kpi a"><p>Produksi berjalan</p><strong>9 WO</strong><span>3 menunggu QC</span></div>
+                  <div class="mk-kpi a"><p>Nilai persediaan</p><strong>Rp 1,12 M</strong><span>4 lokasi</span></div>
+                </div>
+                <div class="mk-row">
+                  <div class="mk-card mk-chart a">
+                    <div class="mk-card-h"><p>Penjualan 6 bulan</p><span class="mk-legend"><i></i> Penjualan <i class="g"></i> Target</span></div>
+                    <div class="mk-bars">
+                      {bars.map((b, i) => (
+                        <div class="mk-bar" style={`--v:${b.v}%;--i:${i}`}>
+                          <span class="t" style={`--tv:${Math.min(b.v + 8, 92)}%`}></span>
+                          <span class="b"></span>
+                          <em>{b.m}</em>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div class="mk-card mk-jobs a">
+                    <div class="mk-card-h"><p>Status pekerjaan</p><span class="mk-link">Lihat semua</span></div>
+                    <ul>
+                      {jobs.map((j, i) => (
+                        <li style={`--i:${i}`}>
+                          <div class="mk-job-t"><strong>{j.wo}</strong> {j.item}<span class={`mk-badge ${j.tone}`}>{j.st}</span></div>
+                          <div class="mk-prog"><span style={`--p:${j.p}%`} class={j.tone}></span></div>
+                          <small>{j.qty} · {j.p}%</small>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </MockShell>
+            </div>
+          </div>
+
+          <!-- 2. Katalog (screenshot nyata) -->
+          <div class="pv__panel" role="tabpanel" id="pv-panel-katalog" aria-labelledby="pv-tab-katalog" hidden>
+            <picture>
+              <source media="(max-width: 700px)" srcset="/assets/app-produk-jadi-960.webp" type="image/webp" />
+              <img
+                src="/assets/app-produk-jadi.webp"
+                width="1883"
+                height="902"
+                loading="lazy"
+                decoding="async"
+                alt="Tangkapan layar halaman Katalog Produk jadi di aplikasi NataAlur: daftar barang dengan SKU, status ketersediaan seperti Out of stock, Pre-order pelanggan, In stock, serta jumlah ready. Berisi data demo."
+              />
+            </picture>
+          </div>
+
+          <!-- 3. Produksi (ilustrasi) -->
+          <div class="pv__panel" role="tabpanel" id="pv-panel-produksi" aria-labelledby="pv-tab-produksi" hidden>
+            <p class="sr-only">Ilustrasi papan produksi berisi pekerjaan pada tahap Antre, Dikerjakan, QC, dan Selesai. Data contoh.</p>
+            <div class="mock-scale">
+              <MockShell active="Produksi">
+                <div class="mk-head">
+                  <div>
+                    <p class="mk-crumb">Produksi › Pekerjaan</p>
+                    <p class="mk-h">Papan produksi</p>
+                  </div>
+                  <span class="mk-btn"><Icon name="plus" size={14} /> Buat pekerjaan</span>
+                </div>
+                <div class="mk-kanban">
+                  {kanban.map((c, ci) => (
+                    <div class="mk-col a" style={`--i:${ci}`}>
+                      <p class={`mk-col-h ${c.tone}`}><i></i>{c.col}<span>{c.cards.length}</span></p>
+                      {c.cards.map((k) => (
+                        <div class="mk-k">
+                          <small>{k.wo}</small>
+                          <strong>{k.t}</strong>
+                          <p>{k.q} · {k.d}</p>
+                          {'p' in k && k.p !== undefined && (
+                            <div class="mk-prog"><span style={`--p:${k.p}%`} class={c.tone}></span></div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </MockShell>
+            </div>
+          </div>
+
+          <!-- 4. Gudang (ilustrasi) -->
+          <div class="pv__panel" role="tabpanel" id="pv-panel-gudang" aria-labelledby="pv-tab-gudang" hidden>
+            <p class="sr-only">Ilustrasi pergerakan stok: penerimaan, pemakaian produksi, transfer antar lokasi, pengiriman, dan penyesuaian, serta ringkasan stok per lokasi. Data contoh.</p>
+            <div class="mock-scale">
+              <MockShell active="Gudang">
+                <div class="mk-head">
+                  <div>
+                    <p class="mk-crumb">Gudang › Pergerakan stok</p>
+                    <p class="mk-h">Pergerakan stok</p>
+                  </div>
+                  <div class="mk-seg"><span class="on">Semua</span><span>Masuk</span><span>Keluar</span><span>Transfer</span></div>
+                </div>
+                <div class="mk-row mk-row--wh">
+                  <div class="mk-card mk-table a">
+                    <div class="mk-tr mk-th"><span>Tanggal</span><span>Dokumen</span><span>Barang</span><span>Lokasi</span><span>Qty</span></div>
+                    {moves.map((m, i) => (
+                      <div class="mk-tr" style={`--i:${i}`}>
+                        <span>{m.d}</span>
+                        <span class="doc">{m.doc}</span>
+                        <span class="it">{m.item}</span>
+                        <span>{m.loc}</span>
+                        <span class={`q ${m.tone}`}>{m.q}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div class="mk-card mk-loc a">
+                    <div class="mk-card-h"><p>Nilai stok per lokasi</p></div>
+                    <ul>
+                      <li><span>Gudang Utama</span><div class="mk-prog"><span style="--p:64%" class="blue"></span></div><small>64%</small></li>
+                      <li><span>Workshop</span><div class="mk-prog"><span style="--p:21%" class="green"></span></div><small>21%</small></li>
+                      <li><span>Toko 1</span><div class="mk-prog"><span style="--p:10%" class="amber"></span></div><small>10%</small></li>
+                      <li><span>Toko 2</span><div class="mk-prog"><span style="--p:5%" class="muted"></span></div><small>5%</small></li>
+                    </ul>
+                    <div class="mk-alert"><Icon name="bell" size={14} /> 3 barang di bawah stok minimum</div>
+                  </div>
+                </div>
+              </MockShell>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kartu melayang (ilustrasi) -->
+      <div class="pv__float pv__float--a" aria-hidden="true" data-parallax="-0.06">
+        <span class="pv__float-ico g"><Icon name="check" size={16} stroke={2.6} /></span>
+        <div><strong>SO-0142 siap dikirim</strong><small>Surat jalan dibuat otomatis</small></div>
+      </div>
+      <div class="pv__float pv__float--b" aria-hidden="true" data-parallax="0.08">
+        <span class="pv__float-ico a"><Icon name="package" size={16} /></span>
+        <div><strong>Stok bahan menipis</strong><small>Plat kuningan · sisa 12 lbr</small></div>
+      </div>
+      <div class="pv__float pv__float--c" aria-hidden="true" data-parallax="-0.1">
+        <span class="pv__float-ico b"><Icon name="qr" size={16} /></span>
+        <div><strong>Scan WO-0231</strong><small>Tahap: finishing</small></div>
+      </div>
+    </div>
+
+    <p class="pv__caption" data-pv-caption aria-live="polite">
+      <span class="label-illustration">Ilustrasi tampilan — data contoh</span>
+    </p>
+  </div>
+</section>
+
+<style is:global>
+  .pv {
+    position: relative;
+    padding-bottom: clamp(2rem, 1rem + 3vw, 4rem);
+  }
+
+  .pv__tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0 auto 22px;
+    padding: 6px;
+    width: fit-content;
+    max-width: 100%;
+    background: rgb(255 255 255 / 0.7);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .pv__tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 42px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 11px;
+    background: transparent;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--muted);
+    overflow: hidden;
+    transition: color 0.2s, background-color 0.25s, box-shadow 0.25s;
+  }
+
+  .pv__tab:hover {
+    color: var(--ink);
+  }
+
+  .pv__tab[aria-selected='true'] {
+    background: var(--surface);
+    color: var(--blue);
+    box-shadow: 0 1px 3px rgb(23 43 56 / 0.1), 0 0 0 1px var(--border);
+  }
+
+  .pv__prog {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 4px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--green));
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    opacity: 0;
+  }
+
+  .pv__tab[aria-selected='true'] .pv__prog {
+    opacity: 1;
+    animation: pv-prog var(--pv-dur, 7000ms) linear forwards;
+    animation-play-state: var(--pv-play, running);
+  }
+
+  .pv.is-static .pv__tab[aria-selected='true'] .pv__prog {
+    animation: none;
+    transform: scaleX(1);
+  }
+
+  @keyframes pv-prog {
+    to { transform: scaleX(1); }
+  }
+
+  .pv__stage {
+    position: relative;
+    max-width: 1120px;
+    margin-inline: auto;
+    perspective: 1800px;
+  }
+
+  .pv__window {
+    position: relative;
+    border-radius: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border-2);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    transform-origin: 50% 0;
+    transform: rotateX(calc(var(--tilt, 0) * 16deg)) scale(calc(1 - var(--tilt, 0) * 0.06));
+    will-change: transform;
+  }
+
+  .pv__bar {
+    display: flex;
+    align-items: center;
+    height: 38px;
+    padding: 0 14px;
+    background: #f3f5f4;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pv__dots {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .pv__dots i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #dfe4e2;
+  }
+
+  .pv__dots i:nth-child(1) { background: #f0857a; }
+  .pv__dots i:nth-child(2) { background: #f5c25b; }
+  .pv__dots i:nth-child(3) { background: #5fcf8a; }
+
+  .pv__url {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 14px;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .pv__url .icon {
+    color: var(--green);
+  }
+
+  .pv__bar-r {
+    flex: 1;
+  }
+
+  .pv__screen {
+    position: relative;
+    aspect-ratio: 1883 / 902;
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .pv__panel {
+    position: absolute;
+    inset: 0;
+  }
+
+  .pv__panel[hidden] {
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .pv__panel {
+    transition: opacity 0.5s var(--ease), visibility 0.5s;
+  }
+
+  .pv__panel.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .pv__panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top left;
+    transform: scale(1.02);
+    transition: transform 1.2s var(--ease);
+  }
+
+  .pv__panel.is-active img {
+    transform: none;
+  }
+
+  .mock-scale {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1280px;
+    height: 613px;
+    transform-origin: 0 0;
+    transform: scale(var(--s, 0.85));
+  }
+
+  /* ---------- Mock app ---------- */
+  .mock {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--ink);
+    background: #fff;
+    text-align: left;
+  }
+
+  .mock__top {
+    height: 54px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mock__menu {
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .mock__top img {
+    height: 28px;
+    width: auto;
+  }
+
+  .mock__search {
+    margin-left: auto;
+    width: 240px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: #9aa6ac;
+  }
+
+  .mock__bell {
+    color: var(--ink-2);
+  }
+
+  .mock__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .mock__body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+  }
+
+  .mock__side {
+    width: 210px;
+    flex-shrink: 0;
+    padding: 18px 12px;
+    border-right: 1px solid var(--border);
+  }
+
+  .mock__side-h {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 15px;
+    padding: 0 10px 12px;
+  }
+
+  .mock__side li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 8px;
+    color: var(--ink-2);
+    margin-bottom: 2px;
+  }
+
+  .mock__side li .icon {
+    color: var(--muted);
+  }
+
+  .mock__side li.is-active {
+    background: var(--blue-50);
+    color: var(--blue);
+    font-weight: 700;
+    box-shadow: inset 3px 0 0 var(--blue);
+  }
+
+  .mock__side li.is-active .icon {
+    color: var(--blue);
+  }
+
+  .mock__main {
+    flex: 1;
+    min-width: 0;
+    padding: 20px 26px;
+    background: #fbfcfb;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mk-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .mk-crumb {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .mk-h {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    margin-top: 2px;
+  }
+
+  .mk-seg {
+    display: flex;
+    padding: 3px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: #fff;
+  }
+
+  .mk-seg span {
+    padding: 5px 12px;
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .mk-seg span.on {
+    background: var(--blue-50);
+    color: var(--blue);
+    font-weight: 700;
+  }
+
+  .mk-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 8px;
+    background: var(--blue);
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .mk-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .mk-kpi,
+  .mk-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .mk-kpi {
+    padding: 14px 16px;
+  }
+
+  .mk-kpi p {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .mk-kpi strong {
+    display: block;
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 4px 0 2px;
+  }
+
+  .mk-kpi span {
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+
+  .mk-kpi span.up {
+    color: var(--green-600);
+    font-weight: 600;
+  }
+
+  .mk-row {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 12px;
+  }
+
+  .mk-card {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .mk-card-h {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .mk-card-h p {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .mk-legend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .mk-legend i {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--blue);
+  }
+
+  .mk-legend i.g {
+    background: var(--green-100);
+    margin-left: 8px;
+  }
+
+  .mk-link {
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .mk-bars {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 22px;
+    padding: 6px 8px 22px;
+    background-image: linear-gradient(var(--border) 1px, transparent 1px);
+    background-size: 100% 25%;
+    position: relative;
+  }
+
+  .mk-bar {
+    flex: 1;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .mk-bar .t,
+  .mk-bar .b {
+    position: absolute;
+    bottom: 0;
+    width: 62%;
+    border-radius: 6px 6px 2px 2px;
+    transform-origin: 50% 100%;
+    transform: scaleY(0);
+    transition: transform 0.9s var(--ease);
+    transition-delay: calc(var(--i) * 70ms + 150ms);
+  }
+
+  .mk-bar .t {
+    height: var(--tv);
+    background: var(--green-50);
+    border: 1px dashed var(--green-100);
+    width: 80%;
+  }
+
+  .mk-bar .b {
+    height: var(--v);
+    background: linear-gradient(180deg, #2f68c7, var(--blue));
+  }
+
+  .mk-bar:last-child .b {
+    background: linear-gradient(180deg, #19c08f, var(--green));
+  }
+
+  .mk-bar em {
+    position: absolute;
+    bottom: -20px;
+    font-style: normal;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .mk-jobs ul {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .mk-job-t {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+  }
+
+  .mk-job-t strong {
+    color: var(--ink);
+  }
+
+  .mk-badge {
+    margin-left: auto;
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 700;
+  }
+
+  .mk-badge.blue { background: var(--blue-50); color: var(--blue); }
+  .mk-badge.amber { background: #fdf1e3; color: #b0631a; }
+  .mk-badge.green { background: var(--green-50); color: var(--green-600); }
+
+  .mk-prog {
+    height: 6px;
+    border-radius: 6px;
+    background: #eef1f0;
+    margin: 5px 0 3px;
+    overflow: hidden;
+  }
+
+  .mk-prog span {
+    display: block;
+    height: 100%;
+    width: var(--p);
+    border-radius: inherit;
+    background: var(--blue);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    transition: transform 1s var(--ease) 0.25s;
+  }
+
+  .mk-prog span.green { background: var(--green); }
+  .mk-prog span.amber { background: var(--amber); }
+  .mk-prog span.muted { background: #9aa6ac; }
+
+  .mk-jobs small,
+  .mk-loc small {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* Kanban */
+  .mk-kanban {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    min-height: 0;
+  }
+
+  .mk-col {
+    background: #f2f5f4;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .mk-col-h {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 2px 4px 4px;
+  }
+
+  .mk-col-h i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #9aa6ac;
+  }
+
+  .mk-col-h.blue i { background: var(--blue); }
+  .mk-col-h.amber i { background: var(--amber); }
+  .mk-col-h.green i { background: var(--green); }
+
+  .mk-col-h span {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--muted);
+    background: #fff;
+    border-radius: 999px;
+    padding: 0 8px;
+  }
+
+  .mk-k {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    box-shadow: 0 1px 2px rgb(23 43 56 / 0.04);
+  }
+
+  .mk-k small {
+    color: var(--blue);
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  .mk-k strong {
+    display: block;
+    font-size: 13px;
+    margin: 2px 0;
+  }
+
+  .mk-k p {
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+
+  /* Gudang */
+  .mk-row--wh {
+    grid-template-columns: 1.7fr 1fr;
+  }
+
+  .mk-table {
+    padding: 6px 0;
+  }
+
+  .mk-tr {
+    display: grid;
+    grid-template-columns: 70px 90px 1.4fr 1.1fr 80px;
+    gap: 10px;
+    align-items: center;
+    padding: 0 16px;
+    height: 46px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--ink-2);
+  }
+
+  .mk-tr:last-child {
+    border-bottom: 0;
+  }
+
+  .mk-th {
+    height: 38px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .mk-tr .doc {
+    color: var(--blue);
+    font-weight: 600;
+  }
+
+  .mk-tr .it {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .mk-tr .q {
+    text-align: right;
+    font-weight: 700;
+  }
+
+  .mk-tr .q.in { color: var(--green-600); }
+  .mk-tr .q.out { color: var(--red); }
+  .mk-tr .q.trf { color: var(--blue); }
+  .mk-tr .q.adj { color: #b0631a; }
+
+  .mk-loc ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .mk-loc li {
+    display: grid;
+    grid-template-columns: 96px 1fr 34px;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+  }
+
+  .mk-loc .mk-prog {
+    margin: 0;
+    height: 8px;
+  }
+
+  .mk-alert {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #fdf5ea;
+    color: #9a5716;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* Animasi masuk isi mock saat panel aktif */
+  .pv__panel .a,
+  .pv__panel .mk-tr,
+  .pv__panel .mk-jobs li {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+    transition-delay: calc(var(--i, 0) * 60ms + 80ms);
+  }
+
+  .pv__panel .mk-kpi:nth-child(2) { --i: 1; }
+  .pv__panel .mk-kpi:nth-child(3) { --i: 2; }
+  .pv__panel .mk-kpi:nth-child(4) { --i: 3; }
+  .pv__panel .mk-chart { --i: 4; }
+  .pv__panel .mk-jobs { --i: 5; }
+  .pv__panel .mk-loc { --i: 3; }
+
+  .pv__panel.is-active.is-play .a,
+  .pv__panel.is-active.is-play .mk-tr,
+  .pv__panel.is-active.is-play .mk-jobs li {
+    opacity: 1;
+    transform: none;
+  }
+
+  .pv__panel.is-active.is-play .mk-bar .t,
+  .pv__panel.is-active.is-play .mk-bar .b,
+  .pv__panel.is-active.is-play .mk-prog span {
+    transform: none;
+  }
+
+  /* Kartu melayang */
+  .pv__float {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px 12px 12px;
+    background: rgb(255 255 255 / 0.96);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow-lg);
+    text-align: left;
+    translate: 0 var(--py, 0px);
+    animation: float 6s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  .pv__float strong {
+    display: block;
+    font-family: var(--font-head);
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+
+  .pv__float small {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .pv__float-ico {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .pv__float-ico.g { background: var(--green); color: #fff; }
+  .pv__float-ico.a { background: #fdf1e3; color: #b0631a; }
+  .pv__float-ico.b { background: var(--blue-50); color: var(--blue); }
+
+  .pv__float--a {
+    left: -46px;
+    bottom: 16%;
+  }
+
+  .pv__float--b {
+    right: -50px;
+    top: 22%;
+    animation-delay: -2s;
+  }
+
+  .pv__float--c {
+    right: 8%;
+    bottom: -26px;
+    animation-delay: -4s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .pv__caption {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 1240px) {
+    .pv__float--a { left: -12px; }
+    .pv__float--b { right: -12px; }
+  }
+
+  @media (max-width: 760px) {
+    .pv__float {
+      display: none;
+    }
+
+    .pv__tabs {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      scrollbar-width: none;
+      width: 100%;
+    }
+
+    .pv__tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .pv__tab {
+      flex-shrink: 0;
+      padding: 0 12px;
+    }
+
+    .pv__window {
+      border-radius: 12px;
+    }
+
+    .pv__bar {
+      height: 30px;
+    }
+
+    .pv__url {
+      font-size: 0.68rem;
+      padding: 2px 10px;
+    }
+
+    .pv__caption {
+      margin-top: 18px;
+    }
+
+    /* Mockup versi ringkas agar tetap terbaca di layar kecil */
+    .pv__screen {
+      aspect-ratio: 900 / 640;
+    }
+
+    .mock-scale {
+      width: 900px;
+      height: 640px;
+    }
+
+    .mock__side,
+    .mock__search,
+    .mock__menu {
+      display: none;
+    }
+
+    .mock__top {
+      justify-content: space-between;
+    }
+
+    .mk-kpi strong {
+      font-size: 26px;
+    }
+
+    .mk-row,
+    .mk-row--wh {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .mk-tr {
+      grid-template-columns: 60px 1.3fr 1fr 70px;
+    }
+
+    .mk-tr > span:nth-child(2) {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pv__window {
+      transform: none !important;
+    }
+
+    .pv__float {
+      animation: none;
+    }
+  }
+</style>

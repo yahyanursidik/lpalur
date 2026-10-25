@@ -1,0 +1,485 @@
+---
+import Icon from './Icon.astro';
+import Scribble from './Scribble.astro';
+import type { IconName } from '../data/site';
+
+const options: { t: string; d: string; icon: IconName }[] = [
+  { t: 'Self-hosted / On-premise', d: 'Server atau jaringan perusahaan sendiri.', icon: 'server' },
+  { t: 'Private Cloud / VPS', d: 'Instalasi dan database khusus perusahaan.', icon: 'cloud' },
+  { t: 'Migrasi sistem lama', d: 'Audit data, pemetaan, dan perpindahan terkontrol.', icon: 'migrate' },
+];
+
+const users: { t: string; icon: IconName }[] = [
+  { t: 'Kantor', icon: 'building' },
+  { t: 'Gudang', icon: 'package' },
+  { t: 'Workshop', icon: 'wrench' },
+  { t: 'Toko', icon: 'store' },
+];
+
+const process = [
+  { t: 'Diskusi kebutuhan', d: 'Ceritakan alur dan kendala bisnis Anda.' },
+  { t: 'Pemetaan proses', d: 'Petakan proses, data, dan peran pengguna.' },
+  { t: 'Usulan implementasi', d: 'Ruang lingkup modul, tahapan, dan infrastruktur.' },
+  { t: 'Instalasi & migrasi', d: 'Pasang di server pilihan, pindahkan data terkontrol.' },
+  { t: 'Uji coba & go-live', d: 'Validasi bersama tim sebelum dipakai penuh.' },
+];
+---
+
+<section class="section deploy" id="implementasi" aria-labelledby="impl-title">
+  <div class="deploy__bg" aria-hidden="true"></div>
+  <div class="container">
+    <div class="deploy__grid">
+      <div>
+        <div class="section-head" data-reveal>
+          <span class="eyebrow">Implementasi</span>
+          <h2 id="impl-title">Server sendiri? <Scribble variant="circle">Bisa.</Scribble></h2>
+          <p>NataAlur dirancang untuk dipasang secara mandiri sesuai kebutuhan dan kebijakan perusahaan.</p>
+        </div>
+
+        <ul class="dopts">
+          {options.map((o, i) => (
+            <li class="dopt" data-reveal style={`--d:${i * 100}`}>
+              <span class="dopt__ico"><Icon name={o.icon} size={22} /></span>
+              <div>
+                <h3>{o.t}</h3>
+                <p>{o.d}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <a href="#kontak" class="btn btn--green btn--lg deploy__cta" data-reveal>
+          Konsultasi implementasi <Icon name="arrow" size={18} class="icon--arrow" />
+        </a>
+      </div>
+
+      <figure class="arch" data-reveal="scale" style="--d:150">
+        <div class="arch__box">
+          <p class="arch__tag"><Icon name="shield" size={14} /> Lingkungan perusahaan Anda</p>
+          <ul class="arch__users">
+            {users.map((u, i) => (
+              <li style={`--k:${i}`}><Icon name={u.icon} size={18} /><span>{u.t}</span></li>
+            ))}
+          </ul>
+          <svg class="arch__lines" viewBox="0 0 400 80" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M50 0 C 50 40, 200 40, 200 80" />
+            <path d="M150 0 C 150 40, 200 40, 200 80" />
+            <path d="M250 0 C 250 40, 200 40, 200 80" />
+            <path d="M350 0 C 350 40, 200 40, 200 80" />
+          </svg>
+          <div class="arch__server">
+            <div class="arch__app">
+              <img src="/assets/mark.webp" alt="" width="160" height="160" loading="lazy" decoding="async" />
+              <div>
+                <strong>NataAlur ERP</strong>
+                <small>Server lokal atau VPS khusus</small>
+              </div>
+              <span class="arch__live"><i></i> Aktif</span>
+            </div>
+            <div class="arch__db">
+              <Icon name="database" size={18} />
+              <span>Database khusus perusahaan</span>
+              <Icon name="lock" size={14} />
+            </div>
+          </div>
+        </div>
+        <div class="arch__other" aria-hidden="true">
+          <span>Instalasi perusahaan lain</span>
+          <b>Terpisah</b>
+        </div>
+        <figcaption class="sr-only">
+          Diagram: pengguna di kantor, gudang, workshop, dan toko terhubung ke satu instalasi NataAlur dengan database khusus perusahaan, terpisah dari instalasi perusahaan lain.
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="dproc" data-reveal>
+      <p class="dproc__title">Cara kita mulai</p>
+      <ol class="dproc__list">
+        {process.map((p, i) => (
+          <li style={`--k:${i}`}>
+            <span class="dproc__n">{String(i + 1).padStart(2, '0')}</span>
+            <strong>{p.t}</strong>
+            <p>{p.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .deploy {
+    background: var(--dark);
+    color: #d9e3e8;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .deploy__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(600px 400px at 85% 15%, rgb(7 159 119 / 0.22), transparent 70%),
+      radial-gradient(700px 500px at 0% 100%, rgb(21 75 164 / 0.35), transparent 70%);
+  }
+
+  .deploy__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+    -webkit-mask-image: linear-gradient(180deg, #000, transparent 90%);
+    mask-image: linear-gradient(180deg, #000, transparent 90%);
+  }
+
+  .deploy h2,
+  .deploy h3,
+  .deploy strong {
+    color: #fff;
+  }
+
+  .deploy .section-head p {
+    color: #a9bac2;
+  }
+
+  .deploy .eyebrow {
+    color: #4fd8ac;
+  }
+
+  .deploy .scribble--green path {
+    stroke: #4fd8ac;
+  }
+
+  .deploy__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: clamp(2rem, 1rem + 4vw, 5rem);
+    align-items: center;
+  }
+
+  .deploy .section-head {
+    margin-bottom: 36px;
+  }
+
+  .dopts {
+    display: grid;
+    gap: 12px;
+  }
+
+  .dopt {
+    display: flex;
+    gap: 16px;
+    padding: 18px 20px;
+    border-radius: var(--r-lg);
+    background: rgb(255 255 255 / 0.04);
+    border: 1px solid rgb(255 255 255 / 0.09);
+    transition: background-color 0.3s, border-color 0.3s, transform 0.4s var(--ease);
+  }
+
+  .dopt:hover {
+    background: rgb(255 255 255 / 0.07);
+    border-color: rgb(79 216 172 / 0.45);
+    transform: translateX(6px);
+  }
+
+  .dopt__ico {
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, rgb(79 216 172 / 0.22), rgb(21 75 164 / 0.3));
+    color: #8ff0cf;
+    border: 1px solid rgb(255 255 255 / 0.1);
+  }
+
+  .dopt h3 {
+    font-size: 1.1rem;
+  }
+
+  .dopt p {
+    margin-top: 4px;
+    color: #a9bac2;
+    font-size: 0.96rem;
+  }
+
+  .deploy__cta {
+    margin-top: 28px;
+  }
+
+  /* Diagram arsitektur */
+  .arch {
+    position: relative;
+    margin: 0;
+  }
+
+  .arch__box {
+    position: relative;
+    padding: 26px 22px 22px;
+    border-radius: var(--r-xl);
+    border: 1.5px dashed rgb(79 216 172 / 0.5);
+    background: rgb(255 255 255 / 0.03);
+  }
+
+  .arch__tag {
+    position: absolute;
+    top: -13px;
+    left: 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 12px;
+    border-radius: 999px;
+    background: var(--dark);
+    border: 1px solid rgb(79 216 172 / 0.5);
+    color: #8ff0cf;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .arch__users {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 6px;
+  }
+
+  .arch__users li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 6px;
+    border-radius: 14px;
+    background: rgb(255 255 255 / 0.06);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #d9e3e8;
+    animation: float 5s ease-in-out infinite;
+    animation-delay: calc(var(--k) * -1.2s);
+  }
+
+  .arch__users .icon {
+    color: #8ff0cf;
+  }
+
+  .arch__lines {
+    width: 100%;
+    height: 70px;
+  }
+
+  .arch__lines path {
+    fill: none;
+    stroke: #4fd8ac;
+    stroke-width: 2;
+    stroke-dasharray: 5 7;
+    vector-effect: non-scaling-stroke;
+    opacity: 0.7;
+    animation: dash-flow 1.6s linear infinite;
+  }
+
+  .arch__server {
+    border-radius: 18px;
+    background: #fff;
+    color: var(--ink);
+    padding: 16px;
+    box-shadow: 0 30px 60px -24px rgb(0 0 0 / 0.6), 0 0 0 6px rgb(79 216 172 / 0.12);
+  }
+
+  .arch__app {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .arch__app img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .arch__app strong {
+    display: block;
+    color: var(--ink);
+    font-family: var(--font-head);
+  }
+
+  .arch__app small {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .arch__live {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--green-600);
+    background: var(--green-50);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+
+  .arch__live i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: blink 1.6s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0.3; }
+  }
+
+  .arch__db {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  .arch__db .icon:first-child {
+    color: var(--blue);
+  }
+
+  .arch__db .icon:last-child {
+    margin-left: auto;
+    color: var(--green);
+  }
+
+  .arch__other {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    padding: 12px 18px;
+    border-radius: 16px;
+    border: 1px dashed rgb(255 255 255 / 0.14);
+    font-size: 0.82rem;
+    color: #7f939c;
+  }
+
+  .arch__other b {
+    font-size: 0.74rem;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.06);
+    color: #a9bac2;
+  }
+
+  /* Proses */
+  .dproc {
+    margin-top: clamp(3.5rem, 2rem + 5vw, 6rem);
+    padding-top: 40px;
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+  }
+
+  .dproc__title {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: #fff;
+    margin-bottom: 26px;
+  }
+
+  .dproc__list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    counter-reset: none;
+  }
+
+  .dproc__list li {
+    position: relative;
+    padding: 18px;
+    border-radius: var(--r-lg);
+    background: rgb(255 255 255 / 0.04);
+    border: 1px solid rgb(255 255 255 / 0.08);
+    transition: transform 0.4s var(--ease), border-color 0.3s;
+  }
+
+  .dproc__list li:hover {
+    transform: translateY(-4px);
+    border-color: rgb(79 216 172 / 0.4);
+  }
+
+  .dproc__list li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    right: -14px;
+    width: 14px;
+    height: 2px;
+    background: rgb(79 216 172 / 0.5);
+  }
+
+  .dproc__n {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: #4fd8ac;
+  }
+
+  .dproc__list strong {
+    display: block;
+    margin-top: 8px;
+    font-family: var(--font-head);
+    font-size: 1rem;
+  }
+
+  .dproc__list p {
+    margin-top: 6px;
+    font-size: 0.88rem;
+    color: #a9bac2;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 1024px) {
+    .deploy__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .dproc__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dproc__list li::after {
+      display: none;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .dproc__list {
+      grid-template-columns: 1fr;
+    }
+
+    .arch__users {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .arch__lines {
+      height: 40px;
+    }
+
+    .deploy__cta {
+      width: 100%;
+    }
+  }
+</style>

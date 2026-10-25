@@ -1,0 +1,135 @@
+---
+import '@fontsource-variable/manrope';
+import '@fontsource-variable/dm-sans';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const { title = site.title, description = site.description, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL('/og-image.png', site.url).href;
+
+// Hanya fakta yang terverifikasi: nama, URL, logo.
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  url: site.url,
+  logo: new URL('/icon-512.png', site.url).href,
+};
+---
+
+<!doctype html>
+<html lang="id" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#154BA4" />
+
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Logo NataAlur ERP dengan tulisan Bisnis berjalan. Semua alurnya tertata." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="preload" as="image" href="/assets/logo-horizontal.webp" type="image/webp" />
+    <script is:inline>document.documentElement.classList.replace('no-js', 'js');</script>
+    <script type="application/ld+json" set:html={JSON.stringify(orgLd)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#konten">Lewati ke konten utama</a>
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
+    <Header />
+    <main id="konten">
+      <slot />
+    </main>
+    <Footer />
+    <button class="to-top" type="button" aria-label="Kembali ke atas" data-to-top>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+    </button>
+    <script>
+      import '../scripts/main.ts';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .js .no-js-only {
+    display: none;
+  }
+
+  .scroll-progress {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 3px;
+    z-index: 120;
+    pointer-events: none;
+  }
+
+  .scroll-progress span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    transform-origin: 0 50%;
+    transform: scaleX(var(--p, 0));
+    background: linear-gradient(90deg, var(--blue), var(--green));
+  }
+
+  .to-top {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 90;
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transform: translateY(12px) scale(0.9);
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), background-color 0.2s;
+  }
+
+  .to-top.is-visible {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .to-top:hover {
+    background: var(--blue);
+    color: #fff;
+    border-color: var(--blue);
+  }
+</style>
